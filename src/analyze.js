@@ -5,8 +5,10 @@ function literal(node) {
  if (!node) return null;
  if (node.type === 'Literal' && typeof node.value === 'string') return node.value;
  if (node.type === 'ObjectExpression') {
-  const prop = node.properties.find(p => p.type === 'Property' && !p.computed && (p.key.name === 'url' || p.key.value === 'url'));
-  return literal(prop?.value);
+  if (node.properties.some(p => p.type !== 'Property' || p.computed)) return null;
+  const props = node.properties.filter(p => p.key.name === 'url' || p.key.value === 'url');
+  if (props.length !== 1 || props[0].kind !== 'init' || props[0].method) return null;
+  return literal(props[0].value);
  }
  return null;
 }
@@ -54,7 +56,7 @@ export function analyze(manifest, entries) {
  for (const root of roots) visit(root,false,[]);
  const rows = entries.map(url => {
   const p = path(url), hit = p && evidence.get(p);
-  return {url, category: !p ? 'unknown' : hit?.category ?? 'unreferenced', chain: hit?.chain ?? []};
+  return {url, category: !p ? 'unknown' : hit?.category === 'static' ? 'static' : (warnings.size || (p.endsWith('.html') && Object.hasOwn(manifest, p))) ? 'unknown' : hit?.category ?? 'unreferenced', chain: hit?.chain ?? []};
  });
  return {rows,warnings:[...warnings]};
 }

@@ -1,0 +1,1 @@
+Synthetic fixture generated with Vite 6.4.1 (`vite build --manifest`) from an HTML entry with a dynamic import, and Workbox 7.3.0 `generateSW` in production mode using `**/*.{js,html}`. The generated SW is treated only as text by the tests. Source-map reference has no effect.

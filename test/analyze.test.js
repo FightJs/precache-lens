@@ -16,3 +16,27 @@ test('rejects non-Workbox JavaScript and malformed manifest', () => {
  assert.throws(()=>parsePrecache('alert(1)'));
  assert.throws(()=>analyze([], []));
 });
+
+test('the shipped example yields useful categories through the same parser as user files', async () => {
+ const { sampleManifest, samplePrecache } = await import('../src/example.js');
+ const result = analyze(sampleManifest, parsePrecache(JSON.stringify(samplePrecache)).entries);
+ assert.deepEqual(result.rows.map(r => r.category), ['static','static','static','dynamic','unreferenced','unknown']);
+});
+test('computed overrides and spread properties do not masquerade as static URLs', () => {
+ const result = parsePrecache('precacheAndRoute([{url:"a.js", ...other}, {url:"a.js", [key]: "b.js"}, {url:"a.js", url: "b.js"}, {url:"ok.js", revision: null}])');
+ assert.deepEqual(result.entries, [null, null, null, 'ok.js']);
+});
+test('an incomplete graph cannot establish that a URL is unreferenced', () => {
+ const result = analyze({'index.html': {isEntry:true,file:'app.js',imports:['missing']}}, ['app.js','other.js']);
+ assert.deepEqual(result.rows.map(r => r.category), ['static','unknown']);
+ assert.ok(result.warnings.length);
+});
+
+test('analyzes actual Vite and Workbox build artifacts conservatively', async () => {
+ const { readFile } = await import('node:fs/promises');
+ const manifest = JSON.parse(await readFile(new URL('./fixtures/workbox-7-vite-6/manifest.json', import.meta.url), 'utf8'));
+ const sw = await readFile(new URL('./fixtures/workbox-7-vite-6/sw.js.txt', import.meta.url), 'utf8');
+ const rows = analyze(manifest, parsePrecache(sw).entries).rows;
+ assert.deepEqual(rows.map(r => r.category), ['static','dynamic','unknown']);
+ assert.equal(rows[2].url, 'index.html');
+});

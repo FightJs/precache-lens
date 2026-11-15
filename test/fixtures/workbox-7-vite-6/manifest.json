@@ -1,0 +1,17 @@
+{
+  "index.html": {
+    "file": "assets/index-X5thddlX.js",
+    "name": "index",
+    "src": "index.html",
+    "isEntry": true,
+    "dynamicImports": [
+      "lazy.js"
+    ]
+  },
+  "lazy.js": {
+    "file": "assets/lazy-Bqm9_FOk.js",
+    "name": "lazy",
+    "src": "lazy.js",
+    "isDynamicEntry": true
+  }
+}

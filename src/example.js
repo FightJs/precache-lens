@@ -1,0 +1,2 @@
+export const sampleManifest = {'index.html':{file:'assets/app-A1.js',isEntry:true,imports:['shared.js'],dynamicImports:['editor.js']},'shared.js':{file:'assets/shared-B2.js',css:['assets/app-C3.css']},'editor.js':{file:'assets/editor-D4.js',imports:['shared.js']}};
+export const samplePrecache = [{url:'assets/app-A1.js',revision:null},{url:'assets/shared-B2.js',revision:null},{url:'assets/app-C3.css',revision:null},{url:'assets/editor-D4.js',revision:null},{url:'assets/model.wasm',revision:'example'},{url:'https://cdn.example.com/runtime.js',revision:'example'}];

@@ -1,1 +1,1 @@
-{"name":"precache-lens","version":"1.0.0","private":true,"type":"module","scripts":{"dev":"vite","build":"vite build","test":"node --test"},"dependencies":{"acorn":"8.15.0","acorn-walk":"8.3.4"},"devDependencies":{"vite":"6.4.1"}}
+{"name":"precache-lens","version":"1.0.0","private":true,"type":"module","scripts":{"dev":"vite","build":"vite build","test":"node --test"},"dependencies":{"acorn":"8.15.0","acorn-walk":"8.3.4"},"devDependencies":{"vite":"6.4.6"}}
